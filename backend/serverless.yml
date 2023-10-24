@@ -1,7 +1,7 @@
 # TODO: Change the name of the org
 org: anhkhangle
-app: serverless-todo-app-prj4
-service: serverless-todo-app-prj4
+app: clouddcaps-serverless-prj5
+service: clouddcaps-serverless-prj5
 frameworkVersion: '3.32.0'
 
 plugins:
@@ -22,9 +22,9 @@ provider:
     apiGateway: true
 
   environment:
-    TODOS_TABLE: todo-app-v7-${self:provider.stage}
+    TODOS_TABLE: todo-app-images-caps-v1-${self:provider.stage}
     TODOS_CREATED_AT_INDEX: CreatedAtIndex
-    ATTACHMENT_S3_BUCKET: todo-app-images-v8-${self:provider.stage}
+    ATTACHMENT_S3_BUCKET: todo-app-images-caps-v1-${self:provider.stage}
     SIGNED_URL_EXPIRATION: 300
     PROJECT_NAME: "todo-app"
     INDEX_NAME: ${self:provider.environment.TODOS_CREATED_AT_INDEX}
@@ -157,6 +157,29 @@ functions:
           - xray:PutTraceSegments
         Resource:
           - "*"
+
+  SearchTodos:
+    handler: src/lambda/http/searchTodos.handler
+    events:
+      - http:
+         method: get
+         path: todos/{todoName}
+         cors: true
+         authorizer: Auth
+    iamRoleStatements:
+      - Effect: Allow
+        Action:
+          - dynamodb:Query
+          - dynamodb:GetItem
+        Resource: arn:aws:dynamodb:${self:provider.region}:*:table/${self:provider.environment.TODOS_TABLE}
+      - Effect: Allow
+        Action:
+          - dynamodb:Query
+        Resource: arn:aws:dynamodb:${self:provider.region}:*:table/${self:provider.environment.TODOS_TABLE}/index/${self:provider.environment.INDEX_NAME}
+      - Effect: Allow
+        Action:
+          - xray:PutTraceSegments
+        Resource: "*"
 
 resources:
   Resources:

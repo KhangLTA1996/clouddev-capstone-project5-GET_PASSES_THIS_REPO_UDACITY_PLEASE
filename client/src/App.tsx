@@ -7,6 +7,7 @@ import { EditTodo } from './components/EditTodo'
 import { LogIn } from './components/LogIn'
 import { NotFound } from './components/NotFound'
 import { Todos } from './components/Todos'
+import { SearchTodos } from './components/SearchTodos'
 
 export interface AppProps {}
 
@@ -101,6 +102,14 @@ export default class App extends Component<AppProps, AppState> {
           exact
           render={props => {
             return <EditTodo {...props} auth={this.props.auth} />
+          }}
+        />
+     
+        <Route
+          path="/"
+          exact
+          render={props => {
+            return <SearchTodos {...props} auth={this.props.auth} />
           }}
         />
 

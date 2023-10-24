@@ -19,9 +19,8 @@ export class TodosAccess {
     private readonly bucket_name = s3_bucket_name
   ) {}
 
-
   async getAllClient(userId: string): Promise<TodoItem[]> {
-    const resuslt = await this.docClient
+    const result = await this.docClient
       .query({
         TableName: this.todosTable,
         IndexName: this.todosIndex,
@@ -31,7 +30,7 @@ export class TodosAccess {
         },
       })
       .promise();
-    return resuslt.Items as TodoItem[];
+    return result.Items as TodoItem[];
   }
 
   async createClient(item: TodoItem): Promise<TodoItem> {
@@ -107,6 +106,7 @@ export class TodosAccess {
       return "Error";
     }
   }
+
   async getUploadUrl(todoId: string, userId: string): Promise<string> {
     const uploadUrl = this.S3.getSignedUrl("putObject", {
       Bucket: this.bucket_name,
@@ -128,6 +128,21 @@ export class TodosAccess {
       })
       .promise();
     return uploadUrl;
+  }
+  
+  async searchClients(userId: string, todoName: string): Promise<TodoItem[]> {
+    const result = await this.docClient
+      .query({
+        TableName: this.todosTable,
+        IndexName: this.todosIndex,
+        KeyConditionExpression: "userId = :userId; todo = :todoName",
+        ExpressionAttributeValues: {
+          ":userId": userId,
+          ":todoName": todoName,
+        },
+      })
+      .promise();
+    return result.Items as TodoItem[];
   }
 }
 

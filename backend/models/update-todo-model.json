@@ -11,6 +11,12 @@
     },
     "done": {
       "type": "boolean"
+    },
+    "createdDate": {
+      "type": "string"
+    },
+    "modifiedDate": {
+      "type": "string"
     }
   },
   "required": [

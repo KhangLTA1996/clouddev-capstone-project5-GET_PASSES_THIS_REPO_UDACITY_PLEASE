@@ -66,3 +66,11 @@ export async function createAttachmentPresignedUrl(
   const uploadUrl = todosAccess.getUploadUrl(todoId, userId);
   return uploadUrl;
 }
+
+export async function searchTodos(
+  userId: string,
+  todoName: string
+): Promise < TodoItem[] > {
+  logger.info("searchTodos");
+  return await todosAccess.searchClients(userId, todoName);
+}
