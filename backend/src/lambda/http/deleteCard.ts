@@ -1,39 +1,41 @@
 import "source-map-support/register";
+
 import { APIGatewayProxyEvent, APIGatewayProxyResult } from "aws-lambda";
 import * as middy from "middy";
 import { cors, httpErrorHandler } from "middy/middlewares";
-import { searchTodos as searchTodos } from "../../businessLogic/todos";
+
+import { DeleteCard } from "../../businessLogic/cards";
 import { getUserId } from "../utils";
 
 export const handler = middy(
   async (event: APIGatewayProxyEvent): Promise<APIGatewayProxyResult> => {
+    const cardId = event.pathParameters.cardId;
+    const userId = getUserId(event);
     try {
-      const userId = getUserId(event);
-      const todos = await searchTodos(userId, "");
+      await DeleteCard(userId, cardId);
       return {
-        statusCode: 200,
-        body: JSON.stringify({ items: todos }),
         headers: {
           "Access-Control-Allow-Origin": "*",
-          "Access-Control-Allow-Credentials": true
+          "Access-Control-Allow-Credentials": true,
         },
+        statusCode: 204,
+        body: "",
       };
-    } catch (exception) {
+    } catch (err) {
       return {
         headers: {
           "Access-Control-Allow-Origin": "*",
-          "Access-Control-Allow-Credentials": true
+          "Access-Control-Allow-Credentials": true,
         },
         statusCode: 500,
-        body: JSON.stringify({ message: exception })
+        body: JSON.stringify({ Error: err }),
       };
     }
   }
 );
-handler
-    .use(httpErrorHandler())
-    .use(
-      cors({
-        credentials: true
-      })
-    )
+
+handler.use(httpErrorHandler()).use(
+  cors({
+    credentials: true,
+  })
+);

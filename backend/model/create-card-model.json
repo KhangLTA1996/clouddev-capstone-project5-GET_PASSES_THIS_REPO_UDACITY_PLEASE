@@ -1,28 +1,22 @@
 {
   "$schema": "http://json-schema.org/draft-04/schema#",
-  "title": "group",
+  "title": "CreateCard",
   "type": "object",
   "properties": {
-    "name": {
+    "title": {
       "type": "string",
-      "minLength": 1
+      "minLength": 2
+    },
+    "description": {
+      "type": "string"
     },
     "dueDate": {
       "type": "string"
     },
-    "done": {
-      "type": "boolean"
-    },
-    "createdDate": {
-      "type": "string"
-    },
-    "modifiedDate": {
+    "attachmentUrl": {
       "type": "string"
     }
   },
-  "required": [
-    "name",
-    "dueDate"
-  ],
+  "required": ["title", "dueDate"],
   "additionalProperties": false
 }

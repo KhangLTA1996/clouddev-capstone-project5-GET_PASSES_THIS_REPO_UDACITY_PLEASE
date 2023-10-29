@@ -1,124 +1,128 @@
 import * as AWS from "aws-sdk";
 const AWSXRay = require("aws-xray-sdk");
 import { DocumentClient } from "aws-sdk/clients/dynamodb";
-import { createLogger } from "../utils/logger";
-import { TodoItem } from "../models/TodoItem";
-import { TodoUpdate } from "../models/TodoUpdate";
+import { createLogger } from "../ultils/logger";
+import { CardItem } from "../models/CardItem";
+import { CardUpdate } from "../models/CardUpdate";
 
 const XAWS = AWSXRay.captureAWS(AWS);
-const logger = createLogger("TodoAccess");
+const logger = createLogger("CardAccess");
 const url_expiration = process.env.SIGNED_URL_EXPIRATION;
 const s3_bucket_name = process.env.ATTACHMENT_S3_BUCKET;
 
-export class TodosAccess {
+export class CardsAccess {
   constructor(
     private readonly docClient: DocumentClient = createDynamoDBClient(),
-    private readonly todosTable = process.env.TODOS_TABLE,
-    private readonly todosIndex = process.env.TODOS_CREATED_AT_INDEX,
+    private readonly cardsTable = process.env.CARDS_TABLE,
+    private readonly cardsIndex = process.env.CARDS_CREATED_AT_INDEX,
     private readonly S3 = new XAWS.S3({ signatureVersion: "v4" }),
     private readonly bucket_name = s3_bucket_name
   ) {}
 
-  async getAllClient(userId: string): Promise<TodoItem[]> {
+  async getAll(userId: string): Promise<CardItem[]> {
+    logger.info("Call function getAll");
     const result = await this.docClient
       .query({
-        TableName: this.todosTable,
-        IndexName: this.todosIndex,
+        TableName: this.cardsTable,
+        IndexName: this.cardsIndex,
         KeyConditionExpression: "userId = :userId",
         ExpressionAttributeValues: {
           ":userId": userId,
         },
       })
       .promise();
-    return result.Items as TodoItem[];
+    return result.Items as CardItem[];
   }
 
-  async createClient(item: TodoItem): Promise<TodoItem> {
+  async create(item: CardItem): Promise<CardItem> {
+    logger.info("Call function create");
     await this.docClient
       .put({
-        TableName: this.todosTable,
+        TableName: this.cardsTable,
         Item: item,
       })
       .promise();
-    return item as TodoItem;
+    return item as CardItem;
   }
 
-  async updateClient(
+  async update(
     userId: string,
-    todoId: string,
-    todoUpdate: TodoUpdate
-  ): Promise<TodoItem> {
-    logger.info(`Updating todo item ${todoId} in ${this.todosTable}`);
+    cardId: string,
+    cardUpdate: CardUpdate
+  ): Promise<CardItem> {
+    logger.info(`Updating card item ${cardId} in ${this.cardsTable}`);
     try {
       await this.docClient
         .update({
-          TableName: this.todosTable,
+          TableName: this.cardsTable,
           Key: {
             userId,
-            todoId,
+            cardId,
           },
           UpdateExpression:
-            "set #name = :name, #dueDate = :dueDate, #done = :done",
+            "set #name = :name, #dueDate = :dueDate, #done = :done, #attachmentUrl = :attachmentUrl ",
           ExpressionAttributeNames: {
             "#name": "name",
             "#dueDate": "dueDate",
             "#done": "done",
+            "#attachmentUrl": "attachmentUrl",
           },
           ExpressionAttributeValues: {
-            ":name": todoUpdate.name,
-            ":dueDate": todoUpdate.dueDate,
-            ":done": todoUpdate.done,
+            ":name": cardUpdate.name,
+            ":dueDate": cardUpdate.dueDate,
+            ":done": cardUpdate.done,
+            ":attachmentUrl": cardUpdate.attachmentUrl,
           },
           ReturnValues: "UPDATED_NEW",
         })
         .promise();
     } catch (error) {
-      logger.error("Error ======> Updating Todo Failed.", {
+      logger.error("Error updating Card.", {
         error: error,
         data: {
-          todoId,
+          cardId,
           userId,
-          todoUpdate,
+          cardUpdate,
         },
       });
       throw Error(error);
     }
-    return todoUpdate as TodoItem;
+    return cardUpdate as CardItem;
   }
 
-  async deleteClient(userId: string, todoId: string): Promise<String> {
-    logger.info(`Deleting todo item ${todoId} from ${this.todosTable}`);
+  async delete(userId: string, cardId: string): Promise<String> {
+    logger.info(`Deleting card item ${cardId} from ${this.cardsTable}`);
     try {
       await this.docClient
         .delete({
-          TableName: this.todosTable,
+          TableName: this.cardsTable,
           Key: {
             userId,
-            todoId,
+            cardId,
           },
         })
         .promise();
       return "success";
     } catch (e) {
-      logger.info("Error ==>>", {
+      logger.error("Error deleting Card.", {
         error: e,
       });
       return "Error";
     }
   }
 
-  async getUploadUrl(todoId: string, userId: string): Promise<string> {
+  async getUploadUrl(cardId: string, userId: string): Promise<string> {
     const uploadUrl = this.S3.getSignedUrl("putObject", {
       Bucket: this.bucket_name,
-      Key: todoId,
+      Key: cardId,
       Expires: Number(url_expiration),
     });
     await this.docClient
       .update({
-        TableName: this.todosTable,
+        TableName: this.cardsTable,
         Key: {
           userId,
-          todoId,
+          cardId,
         },
         UpdateExpression: "set attachmentUrl = :URL",
         ExpressionAttributeValues: {
@@ -129,23 +133,7 @@ export class TodosAccess {
       .promise();
     return uploadUrl;
   }
-  
-  async searchClients(userId: string, todoName: string): Promise<TodoItem[]> {
-    const result = await this.docClient
-      .query({
-        TableName: this.todosTable,
-        IndexName: this.todosIndex,
-        KeyConditionExpression: "userId = :userId; todo = :todoName",
-        ExpressionAttributeValues: {
-          ":userId": userId,
-          ":todoName": todoName,
-        },
-      })
-      .promise();
-    return result.Items as TodoItem[];
-  }
 }
-
 
 function createDynamoDBClient() {
   if (process.env.IS_OFFLINE) {
@@ -155,6 +143,5 @@ function createDynamoDBClient() {
       endpoint: "http://localhost:8000",
     });
   }
-
   return new XAWS.DynamoDB.DocumentClient();
 }

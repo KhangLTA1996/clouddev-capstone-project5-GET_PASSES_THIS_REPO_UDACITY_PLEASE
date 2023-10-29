@@ -8,11 +8,9 @@
     "noUnusedParameters": true,
     "sourceMap": true,
     "target": "es2017",
-    "outDir": "lib",
-    "allowSyntheticDefaultImports": true
+    "outDir": "lib"
   },
   "exclude": [
-    "node_modules",
-    // "src/**/*.ts"
+    "node_modules"
   ]
 }

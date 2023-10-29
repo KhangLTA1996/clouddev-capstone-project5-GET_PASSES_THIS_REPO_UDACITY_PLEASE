@@ -1,133 +1,130 @@
-# TODO: Change the name of the org
-org: anhkhangle
-app: clouddcaps-serverless-prj5
-service: clouddcaps-serverless-prj5
-frameworkVersion: '3.32.0'
+org: nvnhan
+app: serverless-todo-app-v1
+service: serverless-card-app-v2
+frameworkVersion: "3.35.2"
 
 plugins:
-  - serverless-webpack
+  # - serverless-webpack
   - serverless-iam-roles-per-function
   - serverless-plugin-tracing
+
+custom:
+  documentation:
+    api:
+      info:
+        version: v2.0.0
+        title: Card APP
+        description: Serverless application Card app
+    models:
+      - name: CreateCardRequest
+        contentType: application/json
+        schema: ${file(model/create-card-model.json)}
+      - name: UpdateCardRequest
+        contentType: application/json
+        schema: ${file(model/update-card-model.json)}
 
 provider:
   name: aws
   runtime: nodejs14.x
-  lambdaHashingVersion: '20201221'
-
   stage: ${opt:stage, 'dev'}
-  region: ${opt:region, 'us-west-2'}
-
+  region: ${opt:region, 'us-east-2'}
+  profile: default
   tracing:
     lambda: true
     apiGateway: true
-
   environment:
-    TODOS_TABLE: todo-app-images-caps-v1-${self:provider.stage}
-    TODOS_CREATED_AT_INDEX: CreatedAtIndex
-    ATTACHMENT_S3_BUCKET: todo-app-images-caps-v1-${self:provider.stage}
+    CARDS_TABLE: card-app-${self:provider.stage}
+    CARDS_CREATED_AT_INDEX: CreatedAtIndex
+    ATTACHMENT_S3_BUCKET: card-app-images-${self:provider.stage}
     SIGNED_URL_EXPIRATION: 300
-    PROJECT_NAME: "todo-app"
-    INDEX_NAME: ${self:provider.environment.TODOS_CREATED_AT_INDEX}
-
+    PROJECT_NAME: "card-app"
+    INDEX_NAME: ${self:provider.environment.CARDS_CREATED_AT_INDEX}
 
   logs:
     restApi: true
-
-  iam:
-    role:
-      statements:
-        - Effect: Allow
-          Action:
-            - xray:PutTelemetryRecords
-            - xray:PutTraceSegments
-          Resource: "*"
 
 functions:
   Auth:
     handler: src/lambda/auth/auth0Authorizer.handler
 
-  GetTodos:
-    handler: src/lambda/http/getTodos.handler
+  GetCards:
+    handler: src/lambda/http/getCards.handler
     events:
       - http:
-         method: get
-         path: todos
-         cors: true
-         authorizer: Auth
+          method: get
+          path: cards
+          cors: true
+          authorizer: Auth
     iamRoleStatements:
       - Effect: Allow
         Action:
           - dynamodb:Query
-          - dynamodb:GetItem
-        Resource: arn:aws:dynamodb:${self:provider.region}:*:table/${self:provider.environment.TODOS_TABLE}
+        Resource: arn:aws:dynamodb:${self:provider.region}:*:table/${self:provider.environment.CARDS_TABLE}
       - Effect: Allow
         Action:
           - dynamodb:Query
-        Resource: arn:aws:dynamodb:${self:provider.region}:*:table/${self:provider.environment.TODOS_TABLE}/index/${self:provider.environment.INDEX_NAME}
+        Resource: arn:aws:dynamodb:${self:provider.region}:*:table/${self:provider.environment.CARDS_TABLE}/index/${self:provider.environment.INDEX_NAME}
       - Effect: Allow
         Action:
           - xray:PutTraceSegments
         Resource: "*"
 
-  CreateTodo:
-    handler: src/lambda/http/createTodo.handler
+  CreateCard:
+    handler: src/lambda/http/createCard.handler
     events:
       - http:
           method: post
-          path: todos
+          path: cards
           cors: true
           authorizer: Auth
           request:
-            schemas:
-              application/json: ${file(models/create-todo-model.json)}
+            schema:
+              'application/json': ${file(model/create-card-model.json)}
     iamRoleStatements:
       - Effect: Allow
         Action:
           - dynamodb:PutItem
-        Resource: arn:aws:dynamodb:${self:provider.region}:*:table/${self:provider.environment.TODOS_TABLE}
+        Resource: arn:aws:dynamodb:${self:provider.region}:*:table/${self:provider.environment.CARDS_TABLE}
       - Effect: Allow
         Action:
           - xray:PutTraceSegments
         Resource: "*"
 
-  UpdateTodo:
-    handler: src/lambda/http/updateTodo.handler
+  UpdateCard:
+    handler: src/lambda/http/updateCard.handler
     events:
       - http:
           method: patch
-          path: todos/{todoId}
+          path: cards/{cardId}
           cors: true
           authorizer: Auth
-          documentation:
-            summary: Update a new todo
-            description: Update a new todo
-            requestModels:
-              "application/json": UpdateTodoRequest
-          reqValidatorName: RequestBodyValidator
+          request:
+            schema:
+              'application/json': ${file(model/update-card-model.json)}
     iamRoleStatements:
       - Effect: Allow
         Action:
           - dynamodb:UpdateItem
-        Resource: arn:aws:dynamodb:${self:provider.region}:*:table/${self:provider.environment.TODOS_TABLE}
+        Resource: arn:aws:dynamodb:${self:provider.region}:*:table/${self:provider.environment.CARDS_TABLE}
       - Effect: Allow
         Action:
           - xray:PutTraceSegments
         Resource:
           - "*"
 
-  DeleteTodo:
-    handler: src/lambda/http/deleteTodo.handler
+  DeleteCard:
+    handler: src/lambda/http/deleteCard.handler
     events:
       - http:
           method: delete
-          path: todos/{todoId}
+          path: cards/{cardId}
           cors: true
           authorizer: Auth
     iamRoleStatements:
       - Effect: Allow
         Action:
           - dynamodb:DeleteItem
-        Resource: arn:aws:dynamodb:${self:provider.region}:*:table/${self:provider.environment.TODOS_TABLE}
+        Resource: arn:aws:dynamodb:${self:provider.region}:*:table/${self:provider.environment.CARDS_TABLE}
       - Effect: Allow
         Action:
           - xray:PutTraceSegments
@@ -139,7 +136,7 @@ functions:
     events:
       - http:
           method: post
-          path: todos/{todoId}/attachment
+          path: cards/{cardId}/attachment
           cors: true
           authorizer: Auth
     iamRoleStatements:
@@ -151,36 +148,12 @@ functions:
       - Effect: Allow
         Action:
           - dynamodb:UpdateItem
-        Resource: arn:aws:dynamodb:${self:provider.region}:*:table/${self:provider.environment.TODOS_TABLE}
+        Resource: arn:aws:dynamodb:${self:provider.region}:*:table/${self:provider.environment.CARDS_TABLE}
       - Effect: Allow
         Action:
           - xray:PutTraceSegments
         Resource:
           - "*"
-
-  SearchTodos:
-    handler: src/lambda/http/searchTodos.handler
-    events:
-      - http:
-         method: get
-         path: todos/{todoName}
-         cors: true
-         authorizer: Auth
-    iamRoleStatements:
-      - Effect: Allow
-        Action:
-          - dynamodb:Query
-          - dynamodb:GetItem
-        Resource: arn:aws:dynamodb:${self:provider.region}:*:table/${self:provider.environment.TODOS_TABLE}
-      - Effect: Allow
-        Action:
-          - dynamodb:Query
-        Resource: arn:aws:dynamodb:${self:provider.region}:*:table/${self:provider.environment.TODOS_TABLE}/index/${self:provider.environment.INDEX_NAME}
-      - Effect: Allow
-        Action:
-          - xray:PutTraceSegments
-        Resource: "*"
-
 resources:
   Resources:
     GatewayResponseDefault4XX:
@@ -193,26 +166,26 @@ resources:
         ResponseType: DEFAULT_4XX
         RestApiId:
           Ref: ApiGatewayRestApi
-    
-    TodosTable:
+
+    CardsTable:
       Type: AWS::DynamoDB::Table
       Properties:
         AttributeDefinitions:
           - AttributeName: userId
             AttributeType: S
-          - AttributeName: todoId
+          - AttributeName: cardId
             AttributeType: S
           - AttributeName: createdAt
             AttributeType: S
         KeySchema:
           - AttributeName: userId
             KeyType: HASH
-          - AttributeName: todoId
+          - AttributeName: cardId
             KeyType: RANGE
         BillingMode: PAY_PER_REQUEST
-        TableName: ${self:provider.environment.TODOS_TABLE}
+        TableName: ${self:provider.environment.CARDS_TABLE}
         LocalSecondaryIndexes:
-          - IndexName: ${self:provider.environment.TODOS_CREATED_AT_INDEX}
+          - IndexName: ${self:provider.environment.CARDS_CREATED_AT_INDEX}
             KeySchema:
               - AttributeName: userId
                 KeyType: HASH
@@ -225,13 +198,6 @@ resources:
       Type: AWS::S3::Bucket
       Properties:
         BucketName: ${self:provider.environment.ATTACHMENT_S3_BUCKET}
-        OwnershipControls:
-          Rules:
-            - ObjectOwnership: ObjectWriter
-        PublicAccessBlockConfiguration:
-          BlockPublicAcls: false
-          BlockPublicPolicy: false
-          IgnorePublicAcls: false
         CorsConfiguration:
           CorsRules:
             - AllowedOrigins:
@@ -244,7 +210,7 @@ resources:
                 - POST
                 - DELETE
                 - HEAD
-              MaxAge: 3000
+              MaxAge: 30000
 
     BucketPolicy:
       Type: AWS::S3::BucketPolicy
@@ -259,3 +225,11 @@ resources:
               Action: "s3:GetObject"
               Resource: "arn:aws:s3:::${self:provider.environment.ATTACHMENT_S3_BUCKET}/*"
         Bucket: !Ref AttachmentsBucket
+    RequestBodyValidator:
+      Type: "AWS::ApiGateway::RequestValidator"
+      Properties:
+        Name: "RequestBodyValidator"
+        RestApiId:
+          Ref: ApiGatewayRestApi
+        ValidateRequestBody: true
+        ValidateRequestParameters: false
