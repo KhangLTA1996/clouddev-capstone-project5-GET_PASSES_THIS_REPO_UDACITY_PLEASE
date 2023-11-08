@@ -1,0 +1,7 @@
+<ion-button 
+  color="tertiary"
+  type="submit"
+  [disabled]="!isLoggedIn"
+  (click)="presentDeleteForm($event)">
+    <ion-icon name="trash"></ion-icon>&nbsp;Remove
+</ion-button>
