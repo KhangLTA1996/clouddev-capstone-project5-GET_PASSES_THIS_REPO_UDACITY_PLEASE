@@ -1,20 +1,20 @@
 apiVersion: apps/v1
 kind: Deployment
 metadata:
-  name: backend-feed
+  name: backend-cart
 spec:
   selector:
     matchLabels:
-      run: backend-feed
+      run: backend-cart
   replicas: 2
   template:
     metadata:
       labels:
-        run: backend-feed
+        run: backend-cart
     spec:
       containers:
-        - name: backend-feed
-          image: slashflea/udagram-api-feed:v2
+        - name: backend-cart
+          image: slashflea/api-cart:v2
           imagePullPolicy: Always
           env:
             - name: POSTGRES_USERNAME
@@ -83,12 +83,12 @@ apiVersion: v1
 kind: Service
 metadata:
   labels:
-    service: backend-feed
-  name: backend-feed
+    service: backend-cart
+  name: backend-cart
 spec:
   ports:
     - name: "8080"
       port: 8080
       targetPort: 8080
   selector:
-    run: backend-feed
+    run: backend-cart

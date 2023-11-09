@@ -3,9 +3,9 @@ kind: ConfigMap
 metadata:
   name: env-configmap
 data:
-  POSTGRES_USERNAME: khang
+  POSTGRES_USERNAME: postgres
   POSTGRES_PASSWORD: '123456789'
-  POSTGRES_HOST: udaprj3cloud.cshlkl7q8kjz.us-west-2.rds.amazonaws.com
+  POSTGRES_HOST: udacity.crsxr3tqxksc.us-west-2.rds.amazonaws.com
   POSTGRES_DB: postgres
   AWS_BUCKET: uda-prj3-caps-bucket
   AWS_REGION: us-west-2
