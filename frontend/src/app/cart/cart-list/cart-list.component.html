@@ -1,0 +1,8 @@
+<div style="background-color: rgb(202, 139, 202)" class="cart">
+  <app-cart-item 
+    *ngFor="let item of cartItems"
+    id="{{item.id}}"
+    [cartItem]="item"
+    (click)="selectedItem(item.id)">
+  </app-cart-item>
+</div>

@@ -1,0 +1,18 @@
+version: "3"
+services:
+  reverseproxy:
+    build:
+      context: ./caps-reverseproxy
+    image: caps-reverseproxy
+  backend_user:
+    build:
+      context: ./api-user
+    image: api-user
+  backend_cart:
+    build:
+      context: ./api-cart
+    image: api-cart
+  frontend:
+    build:
+      context: ./frontend
+    image: frontend:local

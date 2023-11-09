@@ -1,0 +1,36 @@
+.header {
+    text-align: center;
+    font-family: Helvetica, Arial, sans-serif;
+    font-weight: 600;
+    font-size: 1.5rem;
+    margin-top: 80px;
+}
+
+label {
+    display: inline-block;
+    margin-top: 3px;
+    margin-bottom: 2em;
+    margin-right: 5px;
+}
+
+select {
+    width: 200px;
+    margin: 10px;
+    align-content: center;
+}
+
+ul {
+    display: inline-block;
+    margin: 0;
+    padding: 0;
+    list-style: none;
+}
+
+form {
+    top: 13em;
+    position: relative;
+    text-align: center;
+    width: 75%;
+    margin: 0 auto;
+    justify-content: center;
+}
