@@ -56,10 +56,9 @@ export class CartUpdateComponent implements OnInit {
 
     if (!this.updateForm.valid || !this.file) { return; }
 
-    let idValue = 9;
-    console.log('help meeeee', $event);
+    let idValue = localStorage.getItem('itemId');
 
-    this.cart.updateCartItem(idValue, this.updateForm.controls.name.value, this.file, this.updateForm.controls.price.value, this.updateForm.controls.description.value)
+    this.cart.updateCartItem(Number(idValue), this.updateForm.controls.name.value, this.file, this.updateForm.controls.price.value, this.updateForm.controls.description.value)
       .then(() => {
         this.modalController.dismiss();
         this.loadingController.dismiss();

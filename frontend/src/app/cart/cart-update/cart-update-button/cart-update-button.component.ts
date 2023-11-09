@@ -28,12 +28,7 @@ export class CartUpdateButtonComponent implements OnInit, OnDestroy {
     }
   }
 
-  async updateSelectedForm(event, id) {
-    // let target = event.target || event.srcElement || event.currentTarget;
-    // let idAttr = target.id;
-
-    console.log(event);
-
+  async updateSelectedForm() {
     const modal = await this.modalController.create({
       component: CartUpdateComponent,
     });

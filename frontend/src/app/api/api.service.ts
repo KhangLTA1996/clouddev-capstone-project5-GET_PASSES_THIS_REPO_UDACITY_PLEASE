@@ -70,8 +70,9 @@ export class ApiService {
   async delete(id, endpoint): Promise<any> {
     const url = `${API_HOST}${endpoint}/${id}`;
     try {
-      return await this.http.delete<HttpEvent<any>>(url, this.httpOptions)
+      await this.http.delete(url, {responseType: 'text'})
         .toPromise();
+      return location.reload();
     } catch (e) {
       ApiService.handleError(e);
       throw e;
@@ -118,7 +119,7 @@ export class ApiService {
   
   async remove(id: number, endpoint: string): Promise<any> {
     return new Promise ( resolve => {
-        resolve(this.delete(id, endpoint));
-      });
+      resolve(this.delete(id, endpoint));
+    });
   }
 }

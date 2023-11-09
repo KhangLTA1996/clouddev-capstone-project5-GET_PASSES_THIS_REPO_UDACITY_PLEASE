@@ -1,7 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 
-import { Validators, FormBuilder, FormGroup, FormControl } from '@angular/forms';
 import { CartProviderService } from '../services/cart.provider.service';
+import { FormGroup, FormBuilder } from '@angular/forms';
 
 import { LoadingController, ModalController } from '@ionic/angular';
 
@@ -11,10 +11,8 @@ import { LoadingController, ModalController } from '@ionic/angular';
   styleUrls: ['./cart-delete.component.scss'],
 })
 export class CartDeleteComponent implements OnInit {
-  previewDataUrl: string | ArrayBuffer;
-  file: File;
   deleteForm: FormGroup;
-
+  
   constructor(
     private cart: CartProviderService,
     private formBuilder: FormBuilder,
@@ -23,43 +21,16 @@ export class CartDeleteComponent implements OnInit {
   ) { }
 
   ngOnInit() {
-    this.deleteForm = this.formBuilder.group({
-      name: new FormControl('', Validators.required),
-      price: new FormControl('', Validators.required),
-      description: new FormControl('', Validators.required)
-    });
-  }
-
-  setPreviewDataUrl(file: Blob) {
-    const reader  = new FileReader();
-    reader.onloadend = () => {
-      this.previewDataUrl = reader.result;
-    };
-
-    reader.readAsDataURL(file);
-  }
-
-  selectImage(event) {
-    const file = event.srcElement.files;
-
-    if (!file) {
-      return;
-    }
-    this.file = file[0];
-    this.setPreviewDataUrl(this.file);
-
+    this.deleteForm = this.formBuilder.group({ });
   }
 
   onSubmit($event) {
     $event.preventDefault();
     this.loadingController.create();
 
-    if (!this.deleteForm.valid || !this.file) { return; }
+    let idValue = localStorage.getItem('itemId');
 
-    let idValue = 9;
-    console.log('help meeeee', $event);
-
-    this.cart.removeCart(idValue).then(() => {
+    this.cart.removeCart(Number(idValue)).then(() => {
       this.modalController.dismiss();
       this.loadingController.dismiss();
     });

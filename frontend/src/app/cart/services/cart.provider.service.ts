@@ -34,9 +34,7 @@ export class CartProviderService {
   }
 
   async removeCart(id: number): Promise<any> {
-    const res = await this.api.delete(id, '/cart');
-    const cart = [res, ...this.currentCart$.value];
-    this.currentCart$.next(cart);
+    const res = await this.api.remove(id, '/cart');
     return res;
   }
 

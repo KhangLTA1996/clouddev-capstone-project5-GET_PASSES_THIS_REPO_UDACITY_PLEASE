@@ -1,27 +1,19 @@
-<form [formGroup]="deleteForm" (submit)="onSubmit($event)">`
-    <!-- <label>
-        <input type="file" (change)="selectImage($event)" accept="image/*" style="display:none"/>
-        <img *ngIf="previewDataUrl" [src]="previewDataUrl" style="width:50px; height: 50px;" />
-        <a *ngIf="!previewDataUrl" ion-button color="tertiary">
-            Select an item photo
-        </a>
+<form [formGroup]="deleteForm">
+    <label>
+        <ion-label position="floating" color="tertiary">Are you sure to delete this cart?</ion-label>
     </label>
-    <ion-item>
-        <ion-label position="floating" color="tertiary">Name</ion-label>
-        <ion-input type="text" formControlName="name" required></ion-input>
-    </ion-item>
-    <ion-item>
-        <ion-label position="floating" color="tertiary">Price</ion-label>
-        <ion-input type="number" formControlName="price" required></ion-input>
-    </ion-item>
-    <ion-item>
-        <ion-label position="floating" color="tertiary">Description</ion-label>
-        <ion-input type="text" formControlName="description" required></ion-input>
-    </ion-item>
-    <ion-button 
-        color="tertiary" 
-        type="submit"
-        [disabled]="!deleteForm.valid || !file">
-            Confirm
-    </ion-button> -->
+    <div>
+        <ion-button 
+            color="tertiary" 
+            type="submit"
+            (click)="onSubmit($event)">
+            Yes
+        </ion-button>
+        <ion-button 
+            color="tertiary" 
+            type="submit"
+            (click)="cancel()">
+            No
+        </ion-button>
+    </div>
 </form>

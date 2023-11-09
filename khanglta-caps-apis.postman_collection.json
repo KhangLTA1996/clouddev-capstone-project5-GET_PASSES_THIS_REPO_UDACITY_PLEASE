@@ -1,7 +1,7 @@
 {
 	"info": {
-		"_postman_id": "90c44738-86d0-440c-ac60-dcb7b70fb9e8",
-		"name": "udagram-api",
+		"_postman_id": "d3317445-118f-4ff5-80cf-b5a79ee62b1e",
+		"name": "khanglta-caps-apis",
 		"description": "Feed and User API",
 		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
 	},
@@ -10,12 +10,11 @@
 			"name": "Public",
 			"item": [
 				{
-					"name": "/api/v0/feed",
+					"name": "/api/v0/cart",
 					"event": [
 						{
 							"listen": "test",
 							"script": {
-								"id": "1ad01629-c164-41ef-9d19-0a5fd13274af",
 								"exec": [
 									"pm.test(\"Status code is 200\", function () {",
 									"    pm.response.to.have.status(200);",
@@ -37,19 +36,15 @@
 					"request": {
 						"method": "GET",
 						"header": [],
-						"body": {
-							"mode": "raw",
-							"raw": ""
-						},
 						"url": {
-							"raw": "{{host}}/api/v0/feed",
+							"raw": "{{host}}/api/v0/cart",
 							"host": [
 								"{{host}}"
 							],
 							"path": [
 								"api",
 								"v0",
-								"feed"
+								"cart"
 							]
 						},
 						"description": "Get all the items in the feed"
@@ -57,12 +52,11 @@
 					"response": []
 				},
 				{
-					"name": "/api/v0/feed/:id",
+					"name": "/api/v0/cart/:id",
 					"event": [
 						{
 							"listen": "test",
 							"script": {
-								"id": "1ad01629-c164-41ef-9d19-0a5fd13274af",
 								"exec": [
 									"pm.test(\"Status code is 200\", function () {",
 									"    pm.response.to.have.status(200);",
@@ -82,21 +76,17 @@
 						}
 					],
 					"request": {
-						"method": "GET",
+						"method": "DELETE",
 						"header": [],
-						"body": {
-							"mode": "raw",
-							"raw": ""
-						},
 						"url": {
-							"raw": "{{host}}/api/v0/feed/:id",
+							"raw": "{{host}}/api/v0/cart/:id",
 							"host": [
 								"{{host}}"
 							],
 							"path": [
 								"api",
 								"v0",
-								"feed",
+								"cart",
 								":id"
 							],
 							"query": [
@@ -109,81 +99,13 @@
 							"variable": [
 								{
 									"key": "id",
-									"value": "3"
+									"value": "13"
 								}
 							]
 						},
 						"description": "Request a specific feed item detail"
 					},
-					"response": [
-						{
-							"name": "/api/v0/feed/:id",
-							"originalRequest": {
-								"method": "GET",
-								"header": [],
-								"body": {
-									"mode": "raw",
-									"raw": ""
-								},
-								"url": {
-									"raw": "{{host}}/api/v0/feed/:id",
-									"host": [
-										"{{host}}"
-									],
-									"path": [
-										"api",
-										"v0",
-										"feed",
-										":id"
-									],
-									"query": [
-										{
-											"key": "id",
-											"value": "4",
-											"disabled": true
-										}
-									],
-									"variable": [
-										{
-											"key": "id",
-											"value": "3"
-										}
-									]
-								}
-							},
-							"status": "OK",
-							"code": 200,
-							"_postman_previewlanguage": "json",
-							"header": [
-								{
-									"key": "X-Powered-By",
-									"value": "Express"
-								},
-								{
-									"key": "Content-Type",
-									"value": "application/json; charset=utf-8"
-								},
-								{
-									"key": "Content-Length",
-									"value": "133"
-								},
-								{
-									"key": "ETag",
-									"value": "W/\"85-gic7UchUXbyxmSqNsq7nx4+Eaas\""
-								},
-								{
-									"key": "Date",
-									"value": "Tue, 26 Mar 2019 15:07:32 GMT"
-								},
-								{
-									"key": "Connection",
-									"value": "keep-alive"
-								}
-							],
-							"cookie": [],
-							"body": "{\n    \"id\": 3,\n    \"caption\": \"hello0.5278862272947393\",\n    \"url\": null,\n    \"createdAt\": \"2019-03-26T14:16:58.442Z\",\n    \"updatedAt\": \"2019-03-26T14:16:58.443Z\"\n}"
-						}
-					]
+					"response": []
 				},
 				{
 					"name": "/api/v0/user/auth valid registration",
@@ -191,7 +113,6 @@
 						{
 							"listen": "test",
 							"script": {
-								"id": "4fa0ec55-4fb1-4eda-a7a3-08af62324ede",
 								"exec": [
 									"pm.test(\"Status code is 200\", function () {",
 									"    pm.response.to.have.status(200);",
@@ -222,7 +143,7 @@
 						],
 						"body": {
 							"mode": "raw",
-							"raw": "{\n\t\"email\":\"hello@gmail.com\",\n\t\"password\":\"fancypass\"\n}"
+							"raw": "{\n\t\"email\":\"khanganhtranle@gmail.com\",\n\t\"password\":\"123456789\"\n}"
 						},
 						"url": {
 							"raw": "{{host}}/api/v0/users/auth",
@@ -245,7 +166,6 @@
 						{
 							"listen": "test",
 							"script": {
-								"id": "b3737edc-f79e-4823-b2c5-e84e6359e173",
 								"exec": [
 									"pm.test(\"Status code is 400\", function () {",
 									"    pm.response.to.have.status(400);",
@@ -300,7 +220,6 @@
 						{
 							"listen": "test",
 							"script": {
-								"id": "5524b249-cd4d-4e75-91c4-b2f690d53d44",
 								"exec": [
 									"pm.test(\"Status code is 200\", function () {",
 									"    pm.response.to.have.status(200);",
@@ -359,7 +278,6 @@
 						{
 							"listen": "test",
 							"script": {
-								"id": "41cd51df-9472-4d8d-9177-b4f54d6a8530",
 								"exec": [
 									"pm.test(\"Status code is 400\", function () {",
 									"    pm.response.to.have.status(400);",
@@ -415,12 +333,11 @@
 			"name": "Unauthorized",
 			"item": [
 				{
-					"name": "/api/v0/feed unauthorized",
+					"name": "/api/v0/cart unauthorized",
 					"event": [
 						{
 							"listen": "test",
 							"script": {
-								"id": "1ad01629-c164-41ef-9d19-0a5fd13274af",
 								"exec": [
 									"pm.test(\"Status code is 401\", function () {",
 									"    pm.response.to.have.status(401);",
@@ -439,17 +356,22 @@
 						"header": [],
 						"body": {
 							"mode": "raw",
-							"raw": ""
+							"raw": "{\r\n    \"name\": \"trivia01\",\r\n    \"price\": \"10$\",\r\n    \"path\": \"~/test.jpg\",\r\n    \"description\": \"workplace\"\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
 						},
 						"url": {
-							"raw": "{{host}}/api/v0/feed",
+							"raw": "{{host}}/api/v0/cart",
 							"host": [
 								"{{host}}"
 							],
 							"path": [
 								"api",
 								"v0",
-								"feed"
+								"cart"
 							]
 						},
 						"description": "Post a new item to the feed"
@@ -462,12 +384,11 @@
 			"name": "Authorized",
 			"item": [
 				{
-					"name": "/api/v0/feed invalid",
+					"name": "/api/v0/cart invalid response",
 					"event": [
 						{
 							"listen": "test",
 							"script": {
-								"id": "1ad01629-c164-41ef-9d19-0a5fd13274af",
 								"exec": [
 									"pm.test(\"Status code is 400\", function () {",
 									"    pm.response.to.have.status(400);",
@@ -501,14 +422,14 @@
 							"raw": "{}"
 						},
 						"url": {
-							"raw": "{{host}}/api/v0/feed",
+							"raw": "{{host}}/api/v0/cart",
 							"host": [
 								"{{host}}"
 							],
 							"path": [
 								"api",
 								"v0",
-								"feed"
+								"cart"
 							]
 						},
 						"description": "Post a new item to the feed"
@@ -516,12 +437,11 @@
 					"response": []
 				},
 				{
-					"name": "/api/v0/feed authorized Copy",
+					"name": "/api/v0/cart authorized II",
 					"event": [
 						{
 							"listen": "test",
 							"script": {
-								"id": "1ad01629-c164-41ef-9d19-0a5fd13274af",
 								"exec": [
 									"pm.test(\"Status code is 201\", function () {",
 									"    pm.response.to.have.status(201);",
@@ -541,6 +461,16 @@
 						}
 					],
 					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJlbWFpbCI6ImtoYW5nYW5odHJhbmxlQGdtYWlsLmNvbSIsImlhdCI6MTY5OTEwMTEyNn0.HRq531sjJX5MoVaREAth0-Pf3Pnw0uJR6Z4n1yYBAy8",
+									"type": "string"
+								}
+							]
+						},
 						"method": "POST",
 						"header": [
 							{
@@ -548,21 +478,27 @@
 								"name": "Content-Type",
 								"value": "application/json",
 								"type": "text"
+							},
+							{
+								"key": "Authorization",
+								"value": "Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJlbWFpbCI6ImtoYW5nYW5odHJhbmxlQGdtYWlsLmNvbSIsImlhdCI6MTY5OTEwMTEyNn0.HRq531sjJX5MoVaREAth0-Pf3Pnw0uJR6Z4n1yYBAy8",
+								"type": "default"
 							}
 						],
 						"body": {
 							"mode": "raw",
-							"raw": "{\n    \"caption\": \"Hello\",\n    \"url\": \"test.jpg\"\n}"
+							"raw": "{\n    \"name\": \"trivia0ss1\",\n    \"price\": 120,\n    \"url\": \"./test.jpg\",\n    \"description\": \"workplace\"\n}"
 						},
 						"url": {
-							"raw": "{{host}}/api/v0/feed",
+							"raw": "{{host}}/api/v0/cart/9",
 							"host": [
 								"{{host}}"
 							],
 							"path": [
 								"api",
 								"v0",
-								"feed"
+								"cart",
+								"9"
 							]
 						},
 						"description": "Post a new item to the feed"
@@ -584,7 +520,6 @@
 				{
 					"listen": "prerequest",
 					"script": {
-						"id": "65e7c108-0985-4ca7-9613-0898f005cf76",
 						"type": "text/javascript",
 						"exec": [
 							""
@@ -594,7 +529,6 @@
 				{
 					"listen": "test",
 					"script": {
-						"id": "cf28f76e-ffbb-4199-b636-1c080a86e465",
 						"type": "text/javascript",
 						"exec": [
 							""
@@ -608,7 +542,6 @@
 		{
 			"listen": "prerequest",
 			"script": {
-				"id": "bc5d9c7a-7a6b-49ed-af16-206e17e8732f",
 				"type": "text/javascript",
 				"exec": [
 					""
@@ -618,7 +551,6 @@
 		{
 			"listen": "test",
 			"script": {
-				"id": "a7cb0174-2461-42e2-979e-1b5922eea0fe",
 				"type": "text/javascript",
 				"exec": [
 					""
@@ -628,7 +560,6 @@
 	],
 	"variable": [
 		{
-			"id": "3e3ea131-5328-4f50-8fe1-516e3995917d",
 			"key": "host",
 			"value": "http://localhost:8080",
 			"type": "string"

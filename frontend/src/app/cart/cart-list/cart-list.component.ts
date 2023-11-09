@@ -27,4 +27,8 @@ export class CartListComponent implements OnInit, OnDestroy {
       subscription.unsubscribe();
     }
   }
+
+  async selectedItem(id: number) {
+    localStorage.setItem('itemId', id.toString());
+  }
 }
