@@ -57,6 +57,10 @@ Launch the frontend app locally.
     ```bash
     ionic serve
     ```
-* You can visit `http://localhost:4200` in your web browser to verify that the application is running. You should see a web interface.
+* You can visit `http://localhost:4200` in your web browser to verify that the application is running. You should see a web interface or you can visit this website below:
+
+```
+Website link: http://ae9547b0e57fa47eca9dc0c4af6f3e25-598402622.us-west-2.elb.amazonaws.com
+```
 
 Have a nice review.
