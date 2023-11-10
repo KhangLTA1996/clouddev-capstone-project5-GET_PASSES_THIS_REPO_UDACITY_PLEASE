@@ -3,12 +3,12 @@ import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import { IonicModule } from '@ionic/angular';
 import { RouterModule } from '@angular/router';
-import { FeedModule } from '../feed/feed.module';
+import { CartModule } from '../cart/cart.module';
 import { HomePage } from './home.page';
 
 @NgModule({
   imports: [
-    FeedModule,
+    CartModule,
     CommonModule,
     FormsModule,
     IonicModule,

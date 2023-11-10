@@ -1,3 +1,3 @@
-import {FeedItem} from './feed/models/FeedItem';
+import {CartItem} from './cart/models/CartItem';
 
-export const V0_FEED_MODELS = [FeedItem];
+export const V0_CART_MODELS = [CartItem];

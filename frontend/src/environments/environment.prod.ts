@@ -4,16 +4,7 @@
 
 export const environment = {
   production: false,
-  appName: 'Udagram',
-  // apiHost: 'http://localhost:8080/api/v0',
-  apiHost: 'http://a8b0cb90f61814d5dbeac28e97719bc9-1212858559.us-west-2.elb.amazonaws.com:8080/api/v0'
+  appName: 'Item Trivia',
+  // apiHost: 'http://localhost:8080/api/v0'
+  apiHost: 'http://aca434f97d0a546bb9f5881a2a9bfb5d-1796660524.us-west-2.elb.amazonaws.com:8080/api/v0'
 };
-
-/*
- * For easier debugging in development mode, you can import the following file
- * to ignore zone related error stack frames such as `zone.run`, `zoneDelegate.invokeTask`.
- *
- * This import should be commented out in production mode because it will have a negative impact
- * on performance if an error is thrown.
- */
-// import 'zone.js/dist/zone-error';  // Included with Angular CLI.

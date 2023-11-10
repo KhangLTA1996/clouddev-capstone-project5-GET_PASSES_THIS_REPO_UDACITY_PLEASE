@@ -1,12 +1,11 @@
 import {Router, Request, Response} from 'express';
-import {FeedRouter} from './feed/routes/feed.router';
+import {CartRouter} from './cart/routes/cart.router';
 
 const router: Router = Router();
 
-router.use('/feed', FeedRouter);
+router.use('/cart', CartRouter);
 
 router.get('/', async (req: Request, res: Response) => {
-  console.log(req);
   res.send(`V0`);
 });
 

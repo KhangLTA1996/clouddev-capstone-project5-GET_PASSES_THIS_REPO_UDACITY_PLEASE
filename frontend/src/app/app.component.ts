@@ -12,9 +12,9 @@ import { environment } from '../environments/environment';
 export class AppComponent {
   public appPages = [
     {
-      title: 'Home',
+      title: 'Cart',
       url: '/home',
-      icon: 'home'
+      icon: 'cart'
     }
   ];
 

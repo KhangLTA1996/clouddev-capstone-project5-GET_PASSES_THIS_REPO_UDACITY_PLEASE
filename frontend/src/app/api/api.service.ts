@@ -32,26 +32,51 @@ export class ApiService {
     this.token = token;
   }
 
-  get(endpoint): Promise<any> {
+  async get(endpoint): Promise<any> {
     const url = `${API_HOST}${endpoint}`;
     const req = this.http.get(url, this.httpOptions).pipe(map(ApiService.extractData));
 
-    return req
-            .toPromise()
-            .catch((e) => {
-              ApiService.handleError(e);
-              throw e;
-            });
+    try {
+      return await req
+        .toPromise();
+    } catch (e) {
+      ApiService.handleError(e);
+      throw e;
+    }
   }
 
-  post(endpoint, data): Promise<any> {
+  async post(endpoint, data): Promise<any> {
     const url = `${API_HOST}${endpoint}`;
-    return this.http.post<HttpEvent<any>>(url, data, this.httpOptions)
-            .toPromise()
-            .catch((e) => {
-              ApiService.handleError(e);
-              throw e;
-            });
+    try {
+      return await this.http.post<HttpEvent<any>>(url, data, this.httpOptions)
+        .toPromise();
+    } catch (e) {
+      ApiService.handleError(e);
+      throw e;
+    }
+  }
+
+  async put(id, endpoint, data): Promise<any> {
+    const url = `${API_HOST}${endpoint}/${id}`;
+    try {
+      return await this.http.put<HttpEvent<any>>(url, data, this.httpOptions)
+        .toPromise();
+    } catch (e) {
+      ApiService.handleError(e);
+      throw e;
+    }
+  }
+
+  async delete(id, endpoint): Promise<any> {
+    const url = `${API_HOST}${endpoint}/${id}`;
+    try {
+      await this.http.delete(url, {responseType: 'text'})
+        .toPromise();
+      return location.reload();
+    } catch (e) {
+      ApiService.handleError(e);
+      throw e;
+    }
   }
 
   async upload(endpoint: string, file: File, payload: any): Promise<any> {
@@ -61,7 +86,7 @@ export class ApiService {
     const req = new HttpRequest( 'PUT', signed_url, file,
                                   {
                                     headers: headers,
-                                    reportProgress: true, // track progress
+                                    reportProgress: true,
                                   });
 
     return new Promise ( resolve => {
@@ -70,6 +95,31 @@ export class ApiService {
           resolve(this.post(endpoint, payload));
         }
       });
+    });
+  }
+  
+  async update(id: number, endpoint: string, file: File, payload: any): Promise<any> {
+    const signed_url = (await this.get(`${endpoint}/signed-url/${file.name}`)).url;
+
+    const headers = new HttpHeaders({'Content-Type': file.type});
+    const req = new HttpRequest( 'PUT', signed_url, file,
+                                  {
+                                    headers: headers,
+                                    reportProgress: true,
+                                  });
+
+    return new Promise ( resolve => {
+        this.http.request(req).subscribe((resp) => {
+        if (resp && (<any> resp).status && (<any> resp).status === 200) {
+          resolve(this.put(id, endpoint, payload));
+        }
+      });
+    });
+  }
+  
+  async remove(id: number, endpoint: string): Promise<any> {
+    return new Promise ( resolve => {
+      resolve(this.delete(id, endpoint));
     });
   }
 }

@@ -1,16 +1,16 @@
 script:
-  - docker build -t api-cart ./api-cart
   - docker build -t api-user ./api-user
+  - docker build -t api-cart ./api-cart
   - docker build -t frontend ./frontend
   - docker build -t caps-reverseproxy ./caps-reverseproxy
-  - docker tag api-cart slashflea/api-cart:v1
   - docker tag api-user slashflea/api-user:v1
+  - docker tag api-cart slashflea/api-cart:v1
   - docker tag frontend slashflea/frontend:v1
   - docker tag caps-reverseproxy slashflea/caps-reverseproxy:v1
 
 after_script:
   - echo "$DOCKER_PASSWORD" | docker login -u "$DOCKER_USERNAME" --password-stdin
-  - docker push slashflea/api-cart:v1
   - docker push slashflea/api-user:v1
+  - docker push slashflea/api-cart:v1
   - docker push slashflea/frontend:v1
   - docker push slashflea/caps-reverseproxy:v1

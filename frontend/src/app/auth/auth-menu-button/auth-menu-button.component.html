@@ -2,27 +2,28 @@
 <ion-item-group
   *ngIf=" !( auth.currentUser$ | async ) ">
     <ion-button 
-    color="secondary" 
+    color="tertiary"
+    fill="solid" 
     (click)="presentRegister()">
       Register
     </ion-button>
     <ion-button 
     (click)="presentLogin()"
-    color="primary">
-     Log In
+    color="tertiary">
+      Sign In
     </ion-button>
 </ion-item-group>
 
-<!-- display the avatar if user is logged in -->
+<!-- Display the avatar if user is logged in -->
 <ion-item-group
   *ngIf=" ( auth.currentUser$ | async ) ">
   <ion-button 
-  color="secondary">
+  color="tertiary">
     {{( auth.currentUser$ | async ).email }}
   </ion-button>
   <ion-button 
   (click)="logout()"
-  color="primary">
+  color="tertiary">
     Log Out
   </ion-button>
 </ion-item-group>
