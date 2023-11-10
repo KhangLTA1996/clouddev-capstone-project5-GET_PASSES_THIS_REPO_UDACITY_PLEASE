@@ -14,7 +14,7 @@ spec:
     spec:
       containers:
         - name: backend-cart
-          image: slashflea/api-cart:v2
+          image: slashflea/api-cart:v3
           imagePullPolicy: Always
           env:
             - name: POSTGRES_USERNAME
