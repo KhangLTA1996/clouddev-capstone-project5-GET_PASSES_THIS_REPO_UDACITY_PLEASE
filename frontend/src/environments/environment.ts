@@ -5,5 +5,6 @@
 export const environment = {
   production: false,
   appName: 'Item Trivia',
-  apiHost: 'http://localhost:8080/api/v0'
+  // apiHost: 'http://localhost:8080/api/v0',
+  apiHost: 'aca434f97d0a546bb9f5881a2a9bfb5d-1796660524.us-west-2.elb.amazonaws.com'
 };
