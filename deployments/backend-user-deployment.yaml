@@ -14,7 +14,7 @@ spec:
     spec:
       containers:
         - name: backend-user
-          image: slashflea/api-user:v3
+          image: slashflea/api-user:v1
           env: 
             - name: POSTGRES_USERNAME
               valueFrom:

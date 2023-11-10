@@ -14,7 +14,7 @@ spec:
     spec:
       containers:
       - name: reverseproxy
-        image: slashflea/caps-reverseproxy:v3
+        image: slashflea/caps-reverseproxy:v1
         ports:
         - containerPort: 80
         resources:
